@@ -1,0 +1,56 @@
+spring:
+  profiles:
+    active: prod # prod: MySQL, dev: H2 (로컬 테스트용)
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/ipsi_db?useSSL=false&serverTimezone=Asia/Seoul&allowPublicKeyRetrieval=true
+    username: root
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: none # schema.sql 및 data.sql로 제어하기 위해 none으로 지정
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  sql:
+    init:
+      mode: always # 어플리케이션 시작 시 schema.sql, data.sql 실행
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/data.sql
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:ipsidb;DB_CLOSE_DELAY=-1;MODE=MySQL
+    username: sa
+    password:
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+---
+# JWT Security Settings
+jwt:
+  secret: c3VwZXItc2VjcmV0LWtleS1mb3Itc3ByaW5nLWJvb3Qtd2ViLWFwcGxpY2F0aW9uLXdyaXR0ZW4taW4tamF2YS1jb2Rl
+  expiration: 86400000 # 24 hours in milliseconds
