@@ -20,7 +20,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactElement }> = ({ children }
 
 const App: React.FC = () => {
   return (
-    <Router>
+    <Router basename={import.meta.env.BASE_URL}>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Navbar />
         <main style={{ flex: 1 }}>
